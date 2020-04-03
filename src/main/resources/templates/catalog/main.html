@@ -10,7 +10,7 @@
 <div id="Content">
     <div id="Welcome">
         <div id="WelcomeContent">
-            <!--登录用户的firstname-->
+            Welcome Guest<label th:if="${account ne null}" th:text="${account.firstName}">XXX</label>!
         </div>
     </div>
 
