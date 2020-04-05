@@ -2,14 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>PetStore</title>
     <link rel="StyleSheet" href="../css/jpetstore.css" type="text/css" media="screen"/>
 </head>
 <body>
 <header th:replace="common/top"></header>
 <div id="Content">
     <div id="BackLink">
-        <a href="/catalog/index">Return to Main Menu</a>
+        <a href="/catalog/view">Return to Main Menu</a>
     </div>
 
     <div id="Catalog">
@@ -58,7 +58,7 @@
                 </table>
             </form>
 
-            <a class="Button" th:if="${cart.numberOfItems > 0}" href="#">
+            <a class="Button" th:if="${cart.numberOfItems > 0}" href="/cart/checkOut">
                 Proceed to Checkout
             </a>
         </div>

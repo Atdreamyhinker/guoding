@@ -21,7 +21,8 @@ public class CatalogController {
     private CatalogService catalogService;
 
     @GetMapping("view")
-    public String view(){
+    public String view(Model model){
+
         return "catalog/main";
     }
 

@@ -9,8 +9,8 @@
 <header th:replace="common/top"></header>
 <div id="Content">
     <div id="Welcome">
-        <div id="WelcomeContent">
-            Welcome Guest<label th:if="${account ne null}" th:text="${account.firstName}">XXX</label>!
+        <div id="WelcomeContent" th:if="(${session.account} != null) and (${session.authenticated})">
+            Welcome Guest <label th:text="${session.account.firstName}" >XXX</label>!
         </div>
     </div>
 

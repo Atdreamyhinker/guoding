@@ -15,7 +15,7 @@ import java.util.Iterator;
 
 @Controller
 @SessionScope
-@RequestMapping("/cart/")
+@RequestMapping("/cart")
 public class CartController {
 
     @Autowired
@@ -72,6 +72,12 @@ public class CartController {
         }
         model.addAttribute("cart",cart);
         return "cart/cart";
+    }
+
+    @GetMapping("checkOut")
+    public String checkOut(Model model){
+        model.addAttribute("cart",cart);
+        return "cart/checkout";
     }
 
 }
