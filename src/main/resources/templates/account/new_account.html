@@ -6,16 +6,18 @@
     <link rel="StyleSheet" href="../css/jpetstore.css" type="text/css" media="screen"/>
 </head>
 <body>
-<header th:replace="common/top"></header>
+<header th:replace="common/register_top"></header>
 <div id="Content">
     <div id="Catalog">
-        <form action="/account/newAccount" method="post" th:object="${newAccount}">
+        <form action="/account/newAccount" method="post" th:object="${account}">
             <h3>User Information</h3>
             <table>
                 <tr>
                     <td>User ID:</td>
                     <td><input type="text" th:field="*{username}"></td>
                 </tr>
+                <tr >
+<!--                    <td th:text="${msg}"></td>-->
                 <tr>
                     <td>New password:</td>
                     <td><input type="password" th:field="*{password}" /></td>
@@ -25,9 +27,10 @@
                     <td><input type="password" name="repeatedPassword" /></td>
                 </tr>
                 <tr>
-                    <td th:text="${msg}"></td>
+<!--                    <td th:text="${msg}"></td>-->
                 </tr>
             </table>
+            <p th:text="${msg}"></p>
             <div th:replace="account/include_account_fields::fields">
 
             </div>

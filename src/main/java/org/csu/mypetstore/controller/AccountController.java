@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -109,11 +111,47 @@ public class AccountController {
     }
 
     @GetMapping("newAccountForm")
-    public String newAccountForm(Model model){
-        model.addAttribute("newAccount",new Account());
+    public String newAccountForm(HttpSession session, Model model){
+//        Account account=(Account)session.getAttribute("account");
+//        model.addAttribute("account",account);
+        model.addAttribute("account",new Account());
         model.addAttribute("LANGUAGE_LIST", LANGUAGE_LIST);
         model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
         return "account/new_account";
+    }
+
+    @PostMapping("newAccount")
+    public String newAccount(Account account, String repeatedPassword, Model model) {
+        if(accountService.getAccount(account.getUsername())!=null)
+        {
+            String msg="用户名已存在";
+            boolean authenticated = false;
+            model.addAttribute("authenticated", authenticated);
+            model.addAttribute("msg",msg);
+            return "account/new_account";
+        }
+        if (account.getPassword() == null || account.getPassword().length() == 0 || repeatedPassword == null || repeatedPassword.length() == 0) {
+            String msg = "密码不能为空";
+            boolean authenticated = false;
+            model.addAttribute("authenticated", authenticated);
+            model.addAttribute("msg", msg);
+            return "account/new_account";
+        } else if (!account.getPassword().equals(repeatedPassword)) {
+            String msg = "两次密码不一致";
+            boolean authenticated = false;
+            model.addAttribute("msg", msg);
+            model.addAttribute("authenticated", authenticated);
+            return "account/new_account";
+        } else {
+            accountService.insertAccount(account);
+           account = accountService.getAccount(account.getUsername());
+          //List<Product> myList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
+            boolean authenticated = false;
+            model.addAttribute("account", account);
+            //model.addAttribute("myList", myList);
+            model.addAttribute("authenticated", authenticated);
+            return "redirect:/account/signonForm";
+        }
     }
 }
 
