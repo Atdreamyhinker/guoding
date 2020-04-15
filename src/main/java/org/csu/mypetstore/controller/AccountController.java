@@ -3,6 +3,7 @@ package org.csu.mypetstore.controller;
 
 import org.csu.mypetstore.domain.Account;
 import org.csu.mypetstore.domain.Product;
+import org.csu.mypetstore.domain.RandomValidateCode;
 import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,20 +48,43 @@ public class AccountController {
         CATEGORY_LIST = Collections.unmodifiableList(catList);
     }
 
+    @RequestMapping(value="/checkCode")
+    public void getVerify(HttpServletRequest request, HttpServletResponse response){
+        response.setContentType("image/jpeg");//设置相应类型,告诉浏览器输出的内容为图片
+        response.setHeader("Pragma", "No-cache");//设置响应头信息，告诉浏览器不要缓存此内容
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expire", 0);
+        RandomValidateCode randomValidateCode = new RandomValidateCode();
+        try {
+            randomValidateCode.getRandcode(request, response);//输出验证码图片方法
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @GetMapping("signonForm")
     public String signonForm() {
         return "account/signon";
     }
 
     @PostMapping("signon")
-    public String signon(String username, String password, Model model) {
+    public String signon(String username, String password, String inputStr, Model model,HttpSession session) {
         Account account = accountService.getAccount(username, password);
+        String random = (String) session.getAttribute("RANDOMVALIDATECODEKEY");
 
         if (account == null) {
-            String msg = "Invalid username or password.  Signon failed.";
+            String msg = "Invalid username or password.  Sign on failed.";
             model.addAttribute("msg", msg);
             return "account/signon";
-        } else {
+        }
+        else if(!random.equals(inputStr)){
+            System.out.println(random+"  "+inputStr+"  "+username);
+            String msg= "Verification code error";
+            model.addAttribute("msg", msg);
+            return "account/signon";
+        }
+        else {
             account.setPassword(null);
             List<Product> myList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
             boolean authenticated = true;
@@ -153,5 +179,6 @@ public class AccountController {
             return "redirect:/account/signonForm";
         }
     }
+
 }
 

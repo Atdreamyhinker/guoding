@@ -8,13 +8,16 @@
 <body>
 <header th:replace="common/top"></header>
 <div id="Content">
-    <div id="Catalog">
+    <p id="Catalog">
         <form action="/account/signon" method="post">
             <p>Please enter your username and password.</p>
             <p>
                 Username:<input type="text" name="username"><br/>
-                Password:<input type="password" name="password">
+                Password:<input type="password" name="password"><br/>
+                verify code:<input type="text"  name="inputStr"><br/>
+                <img src="checkCode" alt="" width="100" height="32"  style="height:43px;cursor:pointer;" onclick="this.src=this.src+'?'">
             </p>
+
             <p th:if="${msg!=null}" th:text="${msg}"></p>
             <input type="submit" value="Login">
         </form>

@@ -1,5 +1,7 @@
 package org.csu.mypetstore.domain;
 
+import org.springframework.stereotype.Component;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
