@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>PetStore</title>
+    <link rel="StyleSheet" href="../css/jpetstore.css" type="text/css" media="screen"/>
+</head>
+<body>
+<header th:replace="common/top"></header>
+<div id="Content">
+    <div id="BackLink">
+        <a href="/account/editAccountForm">Return to My Account</a>
+    </div>
+
+    <h2>My Orders</h2>
+
+    <table>
+        <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Total Price</th>
+        </tr>
+
+
+            <tr th:each="order:${orderList}">
+<!--                <td><stripes:link-->
+<!--                        beanclass="org.mybatis.jpetstore.web.actions.OrderActionBean"-->
+<!--                        event="viewOrder">-->
+<!--                    <stripes:param name="orderId" value="${order.orderId}" />-->
+<!--                    ${order.orderId}-->
+<!--                </stripes:link></td>-->
+                <td>
+                    <a th:href="'/order/viewOrder?orderId='+${order.orderId}" th:text="${order.orderId}" >order.orderId</a>
+                </td>
+                <td  th:text="${#dates.format(order.orderDate,'yyyy/MM/dd hh:mm:ss')}"></td>
+                <td th:text="'$'+${#numbers.formatDecimal(order.totalPrice,1,2)}"></td>
+
+            </tr>
+    </table>
+
+</div>
+<footer th:replace="common/bottom"></footer>
+</body>
+</html>
